@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ManhwaKu</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #0a0a14;
+    color: #e2d9f3;
+    min-height: 100vh;
+  }
+
+  /* =====================
+     HALAMAN GATE (LOGIN)
+  ===================== */
+  #gate {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a14;
+  }
+
+  .gate-card {
+    background: #12121f;
+    border: 1px solid rgba(167,139,250,.25);
+    border-radius: 16px;
+    padding: 40px 36px;
+    text-align: center;
+    max-width: 360px;
+    width: 90%;
+  }
+
+  .gate-logo {
+    color: #a78bfa;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+
+  .gate-tagline {
+    color: #7c6fa0;
+    font-size: 13px;
+    margin-bottom: 32px;
+  }
+
+  .gate-label {
+    color: #a78bfa;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  .gate-input {
+    width: 100%;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(167,139,250,.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #e2d9f3;
+    font-size: 16px;
+    text-align: center;
+    letter-spacing: 4px;
+    outline: none;
+    transition: border-color .2s;
+    margin-bottom: 14px;
+  }
+
+  .gate-input:focus { border-color: #a78bfa; }
+
+  .gate-btn {
+    width: 100%;
+    background: #a78bfa;
+    color: #0a0a14;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+  }
+
+  .gate-btn:hover { opacity: .9; }
+  .gate-btn:active { transform: scale(0.98); }
+
+  .gate-err {
+    color: #f09595;
+    font-size: 13px;
+    margin-top: 12px;
+    min-height: 20px;
+  }
+
+  .gate-footer {
+    color: #4a4060;
+    font-size: 11px;
+    margin-top: 28px;
+  }
+
+  /* =====================
+     HALAMAN UTAMA
+  ===================== */
+  #main { display: none; }
+
+  /* Navbar */
+  .navbar {
+    background: #0d0d1a;
+    border-bottom: 1px solid rgba(167,139,250,.15);
+    padding: 0 32px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    color: #a78bfa;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .nav-links a {
+    color: #c4b5fd;
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .15s, color .15s;
+  }
+
+  .nav-links a:hover { background: rgba(167,139,250,.15); color: #e2d9f3; }
+  .nav-links a.active { background: rgba(167,139,250,.2); color: #e2d9f3; }
+
+  .search-wrap {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(167,139,250,.25);
+    border-radius: 8px;
+    padding: 0 12px;
+    gap: 8px;
+    height: 36px;
+    min-width: 200px;
+    transition: border-color .2s;
+  }
+
+  .search-wrap:focus-within { border-color: #a78bfa; }
+
+  .search-wrap input {
+    background: none;
+    border: none;
+    outline: none;
+    color: #e2d9f3;
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .search-wrap input::placeholder { color: #7c6fa0; }
+
+  .nav-logout {
+    background: none;
+    border: 1px solid rgba(167,139,250,.3);
+    color: #7c6fa0;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+
+  .nav-logout:hover { border-color: #a78bfa; color: #a78bfa; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(180deg, #0d0d1a 0%, #0a0a14 100%);
+    border-bottom: 1px solid rgba(167,139,250,.15);
+    padding: 48px 32px 36px;
+    text-align: center;
+  }
+
+  .group-badge {
+    display: inline-block;
+    background: rgba(167,139,250,.12);
+    color: #a78bfa;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(167,139,250,.25);
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #e2d9f3;
+    margin-bottom: 8px;
+  }
+
+  .hero p {
+    color: #7c6fa0;
+    font-size: 14px;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgba(167,139,250,.1);
+    padding: 0 32px;
+    background: #0d0d1a;
+  }
+
+  .stat-item {
+    padding: 12px 20px;
+    font-size: 13px;
+    color: #7c6fa0;
+    border-right: 1px solid rgba(167,139,250,.1);
+  }
+
+  .stat-item span {
+    color: #a78bfa;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  /* Section */
+  .section { padding: 28px 32px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e2d9f3;
+  }
+
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 16px;
+    background: #a78bfa;
+    border-radius: 2px;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+
+  .see-all {
+    color: #a78bfa;
+    font-size: 13px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  /* Comics grid */
+  .comics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+
+  .comic-card {
+    background: #12121f;
+    border: 1px solid rgba(167,139,250,.12);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color .2s, transform .15s;
+  }
+
+  .comic-card:hover {
+    border-color: rgba(167,139,250,.5);
+    transform: translateY(-2px);
+  }
+
+  .comic-thumb {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    display: block;
+    background: #1a1a2e;
+  }
+
+  .thumb-placeholder {
+    width: 100%;
+    aspect-ratio: 2/3;
+    background: #1a1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .thumb-placeholder span {
+    font-size: 11px;
+    color: #4a4060;
+  }
+
+  .comic-info { padding: 10px 10px 12px; }
+
+  .comic-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e2d9f3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+  }
+
+  .comic-ch {
+    font-size: 11px;
+    color: #7c6fa0;
+  }
+
+  .comic-genre {
+    display: inline-block;
+    background: rgba(167,139,250,.1);
+    color: #a78bfa;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-top: 5px;
+  }
+
+  /* No result */
+  .no-result {
+    text-align: center;
+    padding: 48px;
+    color: #4a4060;
+    font-size: 14px;
+    grid-column: 1 / -1;
+  }
+
+  /* Footer */
+  .footer {
+    background: #0d0d1a;
+    border-top: 1px solid rgba(167,139,250,.1);
+    padding: 20px 32px;
+    text-align: center;
+    color: #4a4060;
+    font-size: 12px;
+    margin-top: 20px;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .navbar { padding: 0 16px; }
+    .nav-links { display: none; }
+    .search-wrap { min-width: 140px; }
+    .hero { padding: 32px 20px 24px; }
+    .section { padding: 20px 16px; }
+    .stats-bar { padding: 0 16px; flex-wrap: wrap; }
+    .comics-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================================
+     HALAMAN GATE (KODE AKSES)
+================================ -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-logo">ManhwaKu</div>
+    <div class="gate-tagline">Website manhwa terbaik kelompok menantu idaman:v</div>
+
+    <div class="gate-label">Kode Akses</div>
+    <input
+      class="gate-input"
+      id="code-input"
+      type="password"
+      placeholder="Masukkan kode"
+      maxlength="30"
+      oninput="clearErr()"
+      onkeydown="if(event.key==='Enter') checkCode()"
+    >
+    <button class="gate-btn" onclick="checkCode()">Masuk &rarr;</button>
+    <div class="gate-err" id="err-msg"></div>
+    <div class="gate-footer">Hubungi admin untuk mendapatkan kode akses</div>
+  </div>
+</div>
+
+<!-- ================================
+     HALAMAN UTAMA MANHWA
+================================ -->
+<div id="main">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-logo" onclick="resetFilter()">ManhwaKu</div>
+    <div class="nav-links">
+      <a onclick="resetFilter()" class="active" id="nav-beranda">Beranda</a>
+      <a onclick="filterGenre('Action')" id="nav-action">Action</a>
+      <a onclick="filterGenre('Romance')" id="nav-romance">Romance</a>
+      <a onclick="filterGenre('Fantasy')" id="nav-fantasy">Fantasy</a>
+    </div>
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#a78bfa" stroke-width="1.5">
+        <circle cx="6.5" cy="6.5" r="4.5"/>
+        <path d="M10.5 10.5L14 14" stroke-linecap="round"/>
+      </svg>
+      <input id="search-input" placeholder="Cari judul manhwa..." oninput="searchComics()">
+    </div>
+    <button class="nav-logout" onclick="logout()">Keluar</button>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="group-badge">&#9733; Coder By Pariz</div>
+    <h1>Selamat datang di ManhwaKu</h1>
+    <p>Koleksi manhwa pilihan, update rutin setiap minggu</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-item"><span id="total-comics">0</span> Manhwa</div>
+    <div class="stat-item"><span>Update</span> Minggu ini</div>
+    <div class="stat-item"><span>Gratis</span> Baca sepuasnya</div>
+    <div class="stat-item"><span>Nama Kelompok : </span> Farish,Edgar,Umay,Zen</div>
+  </div>
+
+  <!-- Daftar Manhwa -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title" id="section-label">Semua Manhwa</div>
+    </div>
+    <div class="comics-grid" id="comics-grid"></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    &copy; 2025 ManhwaKu &mdash; Coder by Pariz &mdash; Semua hak dilindungi
+  </div>
+
+</div>
+
+<script>
+  /* ============================================================
+     KONFIGURASI — UBAH SESUAI KEBUTUHAN KAMU
+  ============================================================ */
+
+  // KODE AKSES — ganti teks di bawah ini sesuai kode yang kamu mau
+  const ACCESS_CODE = "KECAP";
+
+  // DAFTAR MANHWA — tambah/edit/hapus sesuai koleksi kamu
+  // Format tiap item:
+  //   title  : judul manhwa
+  //   ch     : chapter terbaru
+  //   genre  : "Action" / "Romance" / "Fantasy" / dll
+  //   img    : URL gambar cover (kosongkan "" jika belum ada)
+  const COMICS = [
+    {
+      title: "Riot_404",
+      ch: "Tim Riot Informasi Kreator",
+      genre: "Horor",
+      img: "ASSET/1991.jpg"
+    },
+    {
+      title: "How To Fight",
+      ch: "Taejoon Park , Kim Junghyun",
+      genre: "Action",
+      img: "ASSET/1992.jpg"
+    },
+    {
+      title: "Si Juki",
+      ch: "Faza Meonk",
+      genre: "Fantasy",
+      img: "ASSET/1998.jpg"
+    },
+    {
+      title: "Lookism",
+      ch: "Taejoon Park ",
+      genre: "Action",
+      img: "ASSET/1993.jpg"
+    },
+    {
+      title: "King of the Arena",
+      ch: "LICO , Kyeongchan Han Informasi Kreator",
+      genre: "Action",
+      img: "ASSET/1994.jpg"
+    },
+    {
+      title: "Kowloon: COPÓKA",
+      ch: "Inhwi Baek",
+      genre: "Action",
+      img: "ASSET/1995.jpg"
+    },
+    {
+      title: "The Top Dungeon Farmer",
+      ch: "Lee Ha-kyung , Lim hyung , sdcknight ",
+      genre: "Fantasy",
+      img: "ASSET/1996.jpg"
+    },
+    {
+      title: "Ghost Path",
+      ch: "Joo dong Guen",
+      genre: "Horor",
+      img: "ASSET/1997.jpg"
+    },
+    {
+      title: "Strangers from Hell",
+      ch: "kimyongki ",
+      genre: "Horor",
+      img: "ASSET/1999.jpg"
+    },
+  ];
+
+  /* ============================================================
+     LOGIKA PROGRAM — TIDAK PERLU DIUBAH
+  ============================================================ */
+
+  let currentFilter = "all";
+  let currentSearch = "";
+
+  function checkCode() {
+    const val = document.getElementById('code-input').value.trim();
+    if (val === ACCESS_CODE) {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('main').style.display = 'block';
+      document.getElementById('total-comics').textContent = COMICS.length;
+      renderComics(COMICS);
+    } else {
+      document.getElementById('err-msg').textContent = 'Kode salah. Hubungi admin untuk kode yang benar.';
+      document.getElementById('code-input').style.borderColor = '#f09595';
+    }
+  }
+
+  function clearErr() {
+    document.getElementById('err-msg').textContent = '';
+    document.getElementById('code-input').style.borderColor = 'rgba(167,139,250,.3)';
+  }
+
+  function logout() {
+    document.getElementById('main').style.display = 'none';
+    document.getElementById('gate').style.display = 'flex';
+    document.getElementById('code-input').value = '';
+    clearErr();
+  }
+
+  function getFiltered() {
+    return COMICS.filter(c => {
+      const matchGenre = currentFilter === 'all' || c.genre === currentFilter;
+      const matchSearch = c.title.toLowerCase().includes(currentSearch.toLowerCase());
+      return matchGenre && matchSearch;
+    });
+  }
+
+  function renderComics(list) {
+    const grid = document.getElementById('comics-grid');
+    if (list.length === 0) {
+      grid.innerHTML = '<div class="no-result">Tidak ada manhwa yang ditemukan</div>';
+      return;
+    }
+    grid.innerHTML = list.map(c => `
+      <div class="comic-card" title="${c.title}">
+        ${c.img
+          ? `<img class="comic-thumb" src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+          : ''}
+        <div class="thumb-placeholder" style="${c.img ? 'display:none' : 'display:flex'}">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".35">
+            <rect x="3" y="3" width="18" height="18" rx="3"/>
+            <path d="M3 9h18M9 21V9"/>
+          </svg>
+          <span>Cover belum ada</span>
+        </div>
+        <div class="comic-info">
+          <div class="comic-title">${c.title}</div>
+          <div class="comic-ch">${c.ch}</div>
+          <span class="comic-genre">${c.genre}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function searchComics() {
+    currentSearch = document.getElementById('search-input').value;
+    renderComics(getFiltered());
+  }
+
+  function filterGenre(genre) {
+    currentFilter = genre;
+    currentSearch = '';
+    document.getElementById('search-input').value = '';
+    document.getElementById('section-label').textContent = genre;
+    setActiveNav('nav-' + genre.toLowerCase());
+    renderComics(getFiltered());
+  }
+
+  function resetFilter() {
+    currentFilter = 'all';
+    currentSearch = '';
+    document.getElementById('search-input').value = '';
+    document.getElementById('section-label').textContent = 'Semua Manhwa';
+    setActiveNav('nav-beranda');
+    renderComics(COMICS);
+  }
+
+  function setActiveNav(id) {
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
+  }
+</script>
+</body>
+</html>
